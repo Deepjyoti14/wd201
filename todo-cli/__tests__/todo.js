@@ -69,14 +69,18 @@ describe("TodoList test suite", () => {
         )
         const duelaterItem = dueLater();
         expect(duelaterItem.length).toBe(1);
-        expect(new Date(duelaterItem[0].dueDate) > new Date()).toBe(true);
+        expect(new Date(duelaterItem[0].dueDate).toISOString().split('T')[0]).toBe(tomorrow.toISOString().split('T')[0]);
+
     })
     function toDisplayableList(todos) {
+        const today = new Date().toISOString().split('T')[0];
+      
         return todos.map(todo => {
-            const completionStatus = todo.completed ? "[x]" : "[ ]";
-            const dueDate= todo.dueDate ? new Date().toISOString() : ' ';
-            return `${completionStatus} ${todo.title}${dueDate ? ` ${dueDate}` : ''}`;
-          }).join("\n");
-    }
+          const completionStatus = todo.completed ? "[x]" : "[ ]";
+          // Only display the due date if it's not today
+          const dueDate = todo.dueDate !== today ? ` ${todo.dueDate}` : '';
+          return `${completionStatus} ${todo.title}${dueDate}`;
+        }).join("\n");
+      }
 
 })
